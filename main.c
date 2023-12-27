@@ -124,17 +124,10 @@ int16_t main(void)
     SH1106_InvertDisplay(true);
     SH1106_ClearDisplay();
     
-    SH1106_DrawFastHLine(7, 7, 50, WHITE);
-    SH1106_DrawFastHLine(7, 57, 50, WHITE);
-    SH1106_DrawFastVLine(7, 7, 50, WHITE);
-    SH1106_DrawFastVLine(57, 7, 50, WHITE);
-    SH1106_DrawCircle(32,32, 25, WHITE);
-
-    SH1106_DrawFastHLine(67, 7, 50, WHITE);
-    SH1106_DrawFastHLine(67, 57, 50, WHITE);
-    SH1106_DrawFastVLine(67, 7, 50, WHITE);
-    SH1106_DrawFastVLine(117, 7, 50, WHITE);
-    SH1106_DrawCircle(92,32, 25, WHITE);
+    SH1106_DrawRect(7, 7, 50, 50, WHITE, false);
+    SH1106_DrawCircle(32,32, 25, WHITE, false);
+    SH1106_DrawRect(67, 7, 50, 50, WHITE, false);
+    SH1106_DrawCircle(92,32, 25, WHITE, false);
 
     SH1106_Display();
 
@@ -142,13 +135,13 @@ int16_t main(void)
     {
         SH1106_DrawFastHLine(7, 32, 50, BLACK);
         SH1106_DrawFastHLine(67, 32, 50, BLACK);
-        SH1106_DrawFillCircle(32, 32, 10, WHITE);
-        SH1106_DrawFillCircle(92, 32, 10, WHITE);
+        SH1106_DrawCircle(32, 32, 10, WHITE, true);
+        SH1106_DrawCircle(92, 32, 10, WHITE, true);
         SH1106_Display();
         __delay_ms(500);
 
-        SH1106_DrawFillCircle(32, 32, 10, BLACK);
-        SH1106_DrawFillCircle(92, 32, 10, BLACK);
+        SH1106_DrawCircle(32, 32, 10, BLACK, true);
+        SH1106_DrawCircle(92, 32, 10, BLACK, true);
         SH1106_DrawFastHLine(7, 32, 50, WHITE);
         SH1106_DrawFastHLine(67, 32, 50, WHITE);
         SH1106_Display();

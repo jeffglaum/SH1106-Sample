@@ -15,7 +15,7 @@
 #include "i2c.h"
 #include "sh1106_panel.h"
 
-// Display framebuffer.
+// Display frame buffer.
 extern uint8_t buffer[SH1106_LCDHEIGHT * SH1106_LCDWIDTH / 8];
 
     
@@ -56,22 +56,16 @@ void SH1106_Display(void) {
 
 void SH1106_ClearDisplay(void)
 {
-  memset(buffer, 0, (SH1106_LCDWIDTH*SH1106_LCDHEIGHT/8));
+  memset(buffer, 0, (SH1106_LCDWIDTH * SH1106_LCDHEIGHT / 8));
 }
 
-void SH1106_InvertDisplay(bool Invert)
+void SH1106_InvertDisplay(bool invert)
 {
-  if (Invert) {
-    SH1106_command(SH1106_INVERTDISPLAY);
-  } else {
-    SH1106_command(SH1106_NORMALDISPLAY);
-  }
+  SH1106_command((invert ? SH1106_INVERTDISPLAY : SH1106_NORMALDISPLAY));
 }
 
-
-
-void SH1106_DrawPixel(int16_t x, int16_t y, uint16_t color) {
-  if ((x < 0) || (x >= SH1106_LCDWIDTH) || (y < 0) || (y >= SH1106_LCDHEIGHT))
+void SH1106_DrawPixel(uint16_t x, uint16_t y, uint16_t color) {
+  if (x >= SH1106_LCDWIDTH || y >= SH1106_LCDHEIGHT)
   {
     return;
   }
@@ -94,11 +88,9 @@ void SH1106_InitDisplay(void)
     SH1106_command(0x3F);
     SH1106_command(SH1106_SETDISPLAYOFFSET);
     SH1106_command(0x00);                                   // No offset
-	
     SH1106_command(SH1106_SETSTARTLINE | 0x0);              // Line #0 0x40
     SH1106_command(SH1106_CHARGEPUMP);
     SH1106_command(0x10);
- 
     SH1106_command(SH1106_MEMORYMODE);
     SH1106_command(0x00);                                   // 0x0 Act like KS0108
     SH1106_command(SH1106_SEGREMAP | 0x1);
@@ -106,11 +98,9 @@ void SH1106_InitDisplay(void)
     SH1106_command(SH1106_SETCOMPINS);
     SH1106_command(0x12);
     SH1106_command(SH1106_SETCONTRAST);
-    SH1106_command(0x9F);
- 
+    SH1106_command(0x80);
     SH1106_command(SH1106_SETPRECHARGE);
     SH1106_command(0x22);
-
     SH1106_command(SH1106_SETVCOMDETECT);
     SH1106_command(0x40);
     SH1106_command(SH1106_DISPLAYALLON_RESUME);
@@ -269,7 +259,7 @@ void SH1106_DrawFastVLine(int16_t x, int16_t __y, int16_t __h, uint16_t color) {
   }
 }
 
-void SH1106_DrawCircle (uint8_t x, uint8_t y, uint8_t r, uint16_t color)
+void SH1106_DrawCircle (uint8_t x, uint8_t y, uint8_t r, uint16_t color, bool fill)
 {
     int8_t mx = 0;
     int8_t my;
@@ -277,19 +267,22 @@ void SH1106_DrawCircle (uint8_t x, uint8_t y, uint8_t r, uint16_t color)
     for (mx=r ; mx>=-r ; mx--)
     {
         my = sqrt(r*r - mx*mx);
-        SH1106_DrawPixel((x + mx), (y + my), color);
-        SH1106_DrawPixel((x + mx), (y - my), color);
+        if (fill)
+        {
+            SH1106_DrawFastVLine((x+mx), (y-my), (my*2), color);
+        }
+        else
+        {
+            SH1106_DrawPixel((x + mx), (y + my), color);
+            SH1106_DrawPixel((x + mx), (y - my), color);
+        }
     }
 }
 
-void SH1106_DrawFillCircle (uint8_t x, uint8_t y, uint8_t r, uint16_t color)
+void SH1106_DrawRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color, bool fill)
 {
-    int8_t mx = 0;
-    int8_t my;
-    
-    for (mx=r ; mx>=-r ; mx--)
-    {
-        my = sqrt(r*r - mx*mx);
-        SH1106_DrawFastVLine((x+mx), (y-my), (my*2), color);
-    }
+    SH1106_DrawFastHLine(x, y, w, color);
+    SH1106_DrawFastHLine(x, y+h, w, color);
+    SH1106_DrawFastVLine(x, y, h, color);
+    SH1106_DrawFastVLine(x+w, y, h, color);
 }

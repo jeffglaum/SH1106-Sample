@@ -125,14 +125,14 @@ extern "C" {
 #define INVERSE 2
 
 void SH1106_InitDisplay(void);
-void SH1106_DrawPixel(int16_t x, int16_t y, uint16_t color);
-void SH1106_InvertDisplay(bool Invert);
+void SH1106_DrawPixel(uint16_t x, uint16_t y, uint16_t color);
+void SH1106_InvertDisplay(bool invert);
 void SH1106_ClearDisplay(void);
 void SH1106_Display(void);
 void SH1106_DrawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
 void SH1106_DrawFastVLine(int16_t x, int16_t __y, int16_t __h, uint16_t color);
-void SH1106_DrawCircle (uint8_t x, uint8_t y, uint8_t r, uint16_t color);
-void SH1106_DrawFillCircle (uint8_t x, uint8_t y, uint8_t r, uint16_t color);
+void SH1106_DrawCircle (uint8_t x, uint8_t y, uint8_t r, uint16_t color, bool fill);
+void SH1106_DrawRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color, bool fill);
 
 #ifdef	__cplusplus
 }
