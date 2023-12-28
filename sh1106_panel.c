@@ -16,7 +16,7 @@
 #include "sh1106_panel.h"
 
 // Display frame buffer.
-extern uint8_t buffer[SH1106_LCDHEIGHT * SH1106_LCDWIDTH / 8];
+extern uint8_t buffer[SH1106_BUFFER_LINE_WIDTH_BYTES * SH1106_BUFFER_NUM_LINES];
 
     
 static void SH1106_command(uint8_t c)
@@ -26,37 +26,31 @@ static void SH1106_command(uint8_t c)
 
 void SH1106_Display(void) {
 	
-    SH1106_command(SH1106_SETLOWCOLUMN | 0x0);      // low col = 0
-    SH1106_command(SH1106_SETHIGHCOLUMN | 0x0);     // hi col = 0
-    SH1106_command(SH1106_SETSTARTLINE | 0x0);      // line #0
+    SH1106_command(SH1106_SETLOWCOLUMN  | 0x0);     // Set low column = 0.
+    SH1106_command(SH1106_SETHIGHCOLUMN | 0x0);     // Set high column = 0.
+    SH1106_command(SH1106_SETSTARTLINE  | 0x0);     // Set start line = 0.
 	
-	uint8_t height = SH1106_LCDHEIGHT;
-	uint8_t width =  SH1106_LCDWIDTH; 
-	uint8_t m_row = 0;
-    uint8_t m_col = 0;
+    uint8_t page, line = 0;
+    uint32_t offset = 0;
+    uint8_t width_bytes = (SH1106_REAL_OLED_WIDTH_PIXELS / 8);
 
-	height >>= 3;
-	width  >>= 3;
-	
-	int p = 0;
-    uint8_t i, j=0;
-	
-	for (i = 0; i < height; i++)
+    // Loop through each page and update the lines in each page.   
+	for (page = 0; page < (SH1106_DISPLAYABLE_HEIGHT_PIXELS / NUM_LINES_IN_A_PAGE); page++)
     {
-        SH1106_command(0xB0 + i + m_row);       //set page address
-        SH1106_command(m_col & 0xf);            //set lower column address
-        SH1106_command(0x10 | (m_col >> 4));    //set higher column address
+        SH1106_command(SH1106_SET_PAGEADDRESS | page);  // Set page address.
+        SH1106_command(SH1106_SETLOWCOLUMN  | 0x2);     // Set low column = 2.  NOTE: first two columns aren't displayed.
+        SH1106_command(SH1106_SETHIGHCOLUMN | 0x0);     // Set high column = 0.
 		
-        for(j = 0; j < 8; j++, p+=width)
+        for(line = 0; line < NUM_LINES_IN_A_PAGE; line++, offset += width_bytes)
         {   
-            I2C1_M_Write(I2C_OLED_ADDRESS, 0x40, width, &buffer[p]);
+            I2C1_M_Write(I2C_OLED_ADDRESS, 0x40, width_bytes, &buffer[offset]);
         }
 	}
 }
 
 void SH1106_ClearDisplay(void)
 {
-  memset(buffer, 0, (SH1106_LCDWIDTH * SH1106_LCDHEIGHT / 8));
+  memset(buffer, 0, (SH1106_BUFFER_LINE_WIDTH_BYTES * SH1106_BUFFER_NUM_LINES));
 }
 
 void SH1106_InvertDisplay(bool invert)
@@ -65,35 +59,31 @@ void SH1106_InvertDisplay(bool invert)
 }
 
 void SH1106_DrawPixel(uint16_t x, uint16_t y, uint16_t color) {
-  if (x >= SH1106_LCDWIDTH || y >= SH1106_LCDHEIGHT)
+  if (x >= SH1106_DISPLAYABLE_WIDTH_PIXELS || y >= SH1106_DISPLAYABLE_HEIGHT_PIXELS)
   {
     return;
   }
 
   switch (color) 
   {
-    case WHITE:   buffer[x + (y/8) * SH1106_LCDWIDTH] |=  (1 << (y&7)); break;
-    case BLACK:   buffer[x + (y/8) * SH1106_LCDWIDTH] &= ~(1 << (y&7)); break; 
-    case INVERSE: buffer[x + (y/8) * SH1106_LCDWIDTH] ^=  (1 << (y&7)); break; 
+    case WHITE:   buffer[x  + (y/8) * SH1106_DISPLAYABLE_WIDTH_PIXELS] |=   (1 << (y & 7));     break;
+    case BLACK:   buffer[x  + (y/8) * SH1106_DISPLAYABLE_WIDTH_PIXELS] &=  ~(1 << (y & 7));     break;
+    case INVERSE: buffer[x  + (y/8) * SH1106_DISPLAYABLE_WIDTH_PIXELS] ^=   (1 << (y & 7));     break;
   }  
 }
 
 void SH1106_InitDisplay(void)
 {
-    // Initialization sequence for SH1106 (132x64 OLED module, 128x55 centered)
-    SH1106_command(SH1106_DISPLAYOFF);
-    SH1106_command(SH1106_SETDISPLAYCLOCKDIV);
-    SH1106_command(0x80);                                   // The suggested ratio 0x80
-    SH1106_command(SH1106_SETMULTIPLEX);
-    SH1106_command(0x3F);
-    SH1106_command(SH1106_SETDISPLAYOFFSET);
-    SH1106_command(0x00);                                   // No offset
-    SH1106_command(SH1106_SETSTARTLINE | 0x0);              // Line #0 0x40
-    SH1106_command(SH1106_CHARGEPUMP);
-    SH1106_command(0x10);
-    SH1106_command(SH1106_MEMORYMODE);
-    SH1106_command(0x00);                                   // 0x0 Act like KS0108
-    SH1106_command(SH1106_SEGREMAP | 0x1);
+    // Initialization sequence for SH1106 (132x64 OLED module).
+    SH1106_command(SH1106_DISPLAYOFF);                      // Turn off display.
+    SH1106_command(SH1106_SETDISPLAYCLOCKDIV);              // Set clock divider.
+    SH1106_command(0x50);                                   // PoR value is 0x50.
+    SH1106_command(SH1106_SETMULTIPLEX);                    // Set multiplex mode ratio.
+    SH1106_command(0x3F);                                   // PoR value is 0x3F (63).
+    SH1106_command(SH1106_SETDISPLAYOFFSET);                // Set mapping display start line.
+    SH1106_command(0x00);                                   // PoR value ix 0x0.
+    SH1106_command(SH1106_SETSTARTLINE | 0x0);              // Set COM0 display line to 0.
+    SH1106_command(SH1106_SEGREMAP | 0x1);                  // Set segment re-map to left rotation.
     SH1106_command(SH1106_COMSCANDEC);
     SH1106_command(SH1106_SETCOMPINS);
     SH1106_command(0x12);
@@ -112,7 +102,7 @@ void SH1106_InitDisplay(void)
 void SH1106_DrawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color)
 {
   // Do bounds/limit checks
-  if(y < 0 || y >= SH1106_LCDHEIGHT) { return; }
+  if(y < 0 || y >= SH1106_DISPLAYABLE_HEIGHT_PIXELS) { return; }
 
   // make sure we don't try to draw below 0
   if(x < 0) { 
@@ -121,8 +111,8 @@ void SH1106_DrawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color)
   }
 
   // make sure we don't go off the edge of the display
-  if( (x + w) > SH1106_LCDWIDTH) { 
-    w = (SH1106_LCDWIDTH - x);
+  if( (x + w) > SH1106_DISPLAYABLE_WIDTH_PIXELS) { 
+    w = (SH1106_DISPLAYABLE_WIDTH_PIXELS - x);
   }
 
   // if our width is now negative, punt
@@ -131,7 +121,7 @@ void SH1106_DrawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color)
   // set up the pointer for  movement through the buffer
   register uint8_t *pBuf = buffer;
   // adjust the buffer pointer for the current row
-  pBuf += ((y/8) * SH1106_LCDWIDTH);
+  pBuf += ((y/8) * SH1106_DISPLAYABLE_WIDTH_PIXELS);
   // and offset x columns in
   pBuf += x;
 
@@ -139,16 +129,16 @@ void SH1106_DrawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color)
 
   switch (color) 
   {
-  case WHITE:         while(w--) { *pBuf++ |= mask; }; break;
-    case BLACK: mask = ~mask;   while(w--) { *pBuf++ &= mask; }; break;
-  case INVERSE:         while(w--) { *pBuf++ ^= mask; }; break;
+    case WHITE:   while(w--) { *pBuf++ |= mask; }; break;
+    case BLACK:   mask = ~mask;   while(w--) { *pBuf++ &= mask; }; break;
+    case INVERSE: while(w--) { *pBuf++ ^= mask; }; break;
   }
 }
 
 void SH1106_DrawFastVLine(int16_t x, int16_t __y, int16_t __h, uint16_t color) {
 
   // do nothing if we're off the left or right side of the screen
-  if(x < 0 || x >= SH1106_LCDWIDTH) { return; }
+  if(x < 0 || x >= SH1106_DISPLAYABLE_WIDTH_PIXELS) { return; }
 
   // make sure we don't try to draw below 0
   if(__y < 0) { 
@@ -159,8 +149,8 @@ void SH1106_DrawFastVLine(int16_t x, int16_t __y, int16_t __h, uint16_t color) {
   } 
 
   // make sure we don't go past the height of the display
-  if( (__y + __h) > SH1106_LCDHEIGHT) { 
-    __h = (SH1106_LCDHEIGHT - __y);
+  if( (__y + __h) > SH1106_DISPLAYABLE_HEIGHT_PIXELS) { 
+    __h = (SH1106_DISPLAYABLE_HEIGHT_PIXELS - __y);
   }
 
   // if our height is now negative, punt 
@@ -176,7 +166,7 @@ void SH1106_DrawFastVLine(int16_t x, int16_t __y, int16_t __h, uint16_t color) {
   // set up the pointer for fast movement through the buffer
   register uint8_t *pBuf = buffer;
   // adjust the buffer pointer for the current row
-  pBuf += ((y/8) * SH1106_LCDWIDTH);
+  pBuf += ((y/8) * SH1106_DISPLAYABLE_WIDTH_PIXELS);
   // and offset x columns in
   pBuf += x;
 
@@ -208,7 +198,7 @@ void SH1106_DrawFastVLine(int16_t x, int16_t __y, int16_t __h, uint16_t color) {
 
     h -= mod;
 
-    pBuf += SH1106_LCDWIDTH;
+    pBuf += SH1106_DISPLAYABLE_WIDTH_PIXELS;
   }
 
 
@@ -219,7 +209,7 @@ void SH1106_DrawFastVLine(int16_t x, int16_t __y, int16_t __h, uint16_t color) {
       *pBuf=~(*pBuf);
 
         // adjust the buffer forward 8 rows worth of data
-        pBuf += SH1106_LCDWIDTH;
+        pBuf += SH1106_DISPLAYABLE_WIDTH_PIXELS;
 
         // adjust h & y (there's got to be a faster way for me to do this, but this should still help a fair bit for now)
         h -= 8;
@@ -234,7 +224,7 @@ void SH1106_DrawFastVLine(int16_t x, int16_t __y, int16_t __h, uint16_t color) {
       *pBuf = val;
 
         // adjust the buffer forward 8 rows worth of data
-        pBuf += SH1106_LCDWIDTH;
+        pBuf += SH1106_DISPLAYABLE_WIDTH_PIXELS;
 
         // adjust h & y (there's got to be a faster way for me to do this, but this should still help a fair bit for now)
         h -= 8;

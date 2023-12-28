@@ -1,76 +1,23 @@
-/* Microchip Technology Inc. and its subsidiaries.  You may use this software 
- * and any derivatives exclusively with Microchip products. 
- * 
- * THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS".  NO WARRANTIES, WHETHER 
- * EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE, INCLUDING ANY IMPLIED 
- * WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, AND FITNESS FOR A 
- * PARTICULAR PURPOSE, OR ITS INTERACTION WITH MICROCHIP PRODUCTS, COMBINATION 
- * WITH ANY OTHER PRODUCTS, OR USE IN ANY APPLICATION. 
- *
- * IN NO EVENT WILL MICROCHIP BE LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, 
- * INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND 
- * WHATSOEVER RELATED TO THE SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS 
- * BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.  TO THE 
- * FULLEST EXTENT ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS 
- * IN ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF 
- * ANY, THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
- *
- * MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE 
- * TERMS. 
- */
-
-/* 
- * File:   
- * Author: 
- * Comments:
- * Revision history: 
- */
-
-// This is a guard condition so that contents of this file are not included
-// more than once.  
-#ifndef XC_HEADER_TEMPLATE_H
-#define	XC_HEADER_TEMPLATE_H
+#pragma once
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 
-// TODO Insert appropriate #include <>
-
-// TODO Insert C++ class definitions if appropriate
-
-// TODO Insert declarations
-
-// Comment a function and leverage automatic documentation with slash star star
-/**
-    <p><b>Function prototype:</b></p>
-  
-    <p><b>Summary:</b></p>
-
-    <p><b>Description:</b></p>
-
-    <p><b>Precondition:</b></p>
-
-    <p><b>Parameters:</b></p>
-
-    <p><b>Returns:</b></p>
-
-    <p><b>Example:</b></p>
-    <code>
- 
-    </code>
-
-    <p><b>Remarks:</b></p>
- */
-// TODO Insert declarations or function prototypes (right here) to leverage 
-// live documentation
-
-#ifdef	__cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 #define I2C_OLED_ADDRESS                0x3C
 
-#define SH1106_LCDWIDTH                 128
-#define SH1106_LCDHEIGHT                64
+#define ROUND_UP_TO_BYTE_BOUNDARY(n)    ((n + 8 - 1) & ~(8 - 1))
+#define ROUND_DOWN_TO_BYTE_BOUNDARY(n)  (n & ~(8 - 1))
+#define NUM_LINES_IN_A_PAGE             8
+#define NUM_BITS_TO_A_BYTE              8
+
+// Display is 132x64 however only 128x64 is displayable (2 pixel boundary left and right sides).
+#define SH1106_REAL_OLED_WIDTH_PIXELS   132
+#define SH1106_REAL_OLED_HEIGHT_PIXELS  64
+
+#define SH1106_BUFFER_LINE_WIDTH_BYTES  (ROUND_UP_TO_BYTE_BOUNDARY(SH1106_REAL_OLED_WIDTH_PIXELS) / NUM_BITS_TO_A_BYTE)
+#define SH1106_BUFFER_NUM_LINES         (SH1106_REAL_OLED_HEIGHT_PIXELS)
+
+#define SH1106_DISPLAYABLE_WIDTH_PIXELS  ROUND_DOWN_TO_BYTE_BOUNDARY(SH1106_REAL_OLED_WIDTH_PIXELS)
+#define SH1106_DISPLAYABLE_HEIGHT_PIXELS ROUND_DOWN_TO_BYTE_BOUNDARY(SH1106_REAL_OLED_HEIGHT_PIXELS)
 
 #define SH1106_SETCONTRAST              0x81
 #define SH1106_DISPLAYALLON_RESUME      0xA4
@@ -93,6 +40,7 @@ extern "C" {
 #define SH1106_SETLOWCOLUMN             0x00
 #define SH1106_SETHIGHCOLUMN            0x10
 
+#define SH1106_SET_PAGEADDRESS          0xB0
 #define SH1106_SETSTARTLINE             0x40
 
 #define SH1106_MEMORYMODE               0x20
@@ -120,9 +68,9 @@ extern "C" {
 
 #define sh1106_swap(a, b) { int16_t t = a; a = b; b = t; }
 
-#define BLACK 0
-#define WHITE 1
-#define INVERSE 2
+#define BLACK       0
+#define WHITE       1
+#define INVERSE     2
 
 void SH1106_InitDisplay(void);
 void SH1106_DrawPixel(uint16_t x, uint16_t y, uint16_t color);
@@ -133,10 +81,3 @@ void SH1106_DrawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color);
 void SH1106_DrawFastVLine(int16_t x, int16_t __y, int16_t __h, uint16_t color);
 void SH1106_DrawCircle (uint8_t x, uint8_t y, uint8_t r, uint16_t color, bool fill);
 void SH1106_DrawRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color, bool fill);
-
-#ifdef	__cplusplus
-}
-#endif /* __cplusplus */
-
-#endif	/* XC_HEADER_TEMPLATE_H */
-
