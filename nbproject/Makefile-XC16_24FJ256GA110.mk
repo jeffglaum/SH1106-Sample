@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=configuration_bits.c interrupts.c main.c system.c traps.c user.c i2c.c delay.c sh1106_panel.c
+SOURCEFILES_QUOTED_IF_SPACED=configuration_bits.c interrupts.c main.c system.c traps.c user.c i2c.c delay.c sh1106_panel.c font.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/configuration_bits.o ${OBJECTDIR}/interrupts.o ${OBJECTDIR}/main.o ${OBJECTDIR}/system.o ${OBJECTDIR}/traps.o ${OBJECTDIR}/user.o ${OBJECTDIR}/i2c.o ${OBJECTDIR}/delay.o ${OBJECTDIR}/sh1106_panel.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/configuration_bits.o.d ${OBJECTDIR}/interrupts.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/system.o.d ${OBJECTDIR}/traps.o.d ${OBJECTDIR}/user.o.d ${OBJECTDIR}/i2c.o.d ${OBJECTDIR}/delay.o.d ${OBJECTDIR}/sh1106_panel.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/configuration_bits.o ${OBJECTDIR}/interrupts.o ${OBJECTDIR}/main.o ${OBJECTDIR}/system.o ${OBJECTDIR}/traps.o ${OBJECTDIR}/user.o ${OBJECTDIR}/i2c.o ${OBJECTDIR}/delay.o ${OBJECTDIR}/sh1106_panel.o ${OBJECTDIR}/font.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/configuration_bits.o.d ${OBJECTDIR}/interrupts.o.d ${OBJECTDIR}/main.o.d ${OBJECTDIR}/system.o.d ${OBJECTDIR}/traps.o.d ${OBJECTDIR}/user.o.d ${OBJECTDIR}/i2c.o.d ${OBJECTDIR}/delay.o.d ${OBJECTDIR}/sh1106_panel.o.d ${OBJECTDIR}/font.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/configuration_bits.o ${OBJECTDIR}/interrupts.o ${OBJECTDIR}/main.o ${OBJECTDIR}/system.o ${OBJECTDIR}/traps.o ${OBJECTDIR}/user.o ${OBJECTDIR}/i2c.o ${OBJECTDIR}/delay.o ${OBJECTDIR}/sh1106_panel.o
+OBJECTFILES=${OBJECTDIR}/configuration_bits.o ${OBJECTDIR}/interrupts.o ${OBJECTDIR}/main.o ${OBJECTDIR}/system.o ${OBJECTDIR}/traps.o ${OBJECTDIR}/user.o ${OBJECTDIR}/i2c.o ${OBJECTDIR}/delay.o ${OBJECTDIR}/sh1106_panel.o ${OBJECTDIR}/font.o
 
 # Source Files
-SOURCEFILES=configuration_bits.c interrupts.c main.c system.c traps.c user.c i2c.c delay.c sh1106_panel.c
+SOURCEFILES=configuration_bits.c interrupts.c main.c system.c traps.c user.c i2c.c delay.c sh1106_panel.c font.c
 
 
 
@@ -149,6 +149,12 @@ ${OBJECTDIR}/sh1106_panel.o: sh1106_panel.c  .generated_files/9b5b64e45133def2d3
 	@${RM} ${OBJECTDIR}/sh1106_panel.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  sh1106_panel.c  -o ${OBJECTDIR}/sh1106_panel.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/sh1106_panel.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1    -omf=elf -DXPRJ_XC16_24FJ256GA110=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
+${OBJECTDIR}/font.o: font.c  .generated_files/7094037d91557b44ca9ca234dcb64446a337e611.flag .generated_files/3a182ac3e8b92e4004fdec2790250c51f5614a24.flag
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/font.o.d 
+	@${RM} ${OBJECTDIR}/font.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  font.c  -o ${OBJECTDIR}/font.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/font.o.d"      -g -D__DEBUG -D__MPLAB_DEBUGGER_PK3=1    -omf=elf -DXPRJ_XC16_24FJ256GA110=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	
 else
 ${OBJECTDIR}/configuration_bits.o: configuration_bits.c  .generated_files/6a83b15bc7257c08f0c04459fc931a9504483b56.flag .generated_files/3a182ac3e8b92e4004fdec2790250c51f5614a24.flag
 	@${MKDIR} "${OBJECTDIR}" 
@@ -203,6 +209,12 @@ ${OBJECTDIR}/sh1106_panel.o: sh1106_panel.c  .generated_files/74f2a22ecca9e4ea95
 	@${RM} ${OBJECTDIR}/sh1106_panel.o.d 
 	@${RM} ${OBJECTDIR}/sh1106_panel.o 
 	${MP_CC} $(MP_EXTRA_CC_PRE)  sh1106_panel.c  -o ${OBJECTDIR}/sh1106_panel.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/sh1106_panel.o.d"        -g -omf=elf -DXPRJ_XC16_24FJ256GA110=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+	
+${OBJECTDIR}/font.o: font.c  .generated_files/732e72f7d4e81b17e708ad0401c79703131cee07.flag .generated_files/3a182ac3e8b92e4004fdec2790250c51f5614a24.flag
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/font.o.d 
+	@${RM} ${OBJECTDIR}/font.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  font.c  -o ${OBJECTDIR}/font.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/font.o.d"        -g -omf=elf -DXPRJ_XC16_24FJ256GA110=$(CND_CONF)  -no-legacy-libc  $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
 endif
 

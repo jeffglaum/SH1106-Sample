@@ -281,8 +281,19 @@ void SH1106_DrawCircle (uint8_t x, uint8_t y, uint8_t r, uint16_t color, bool fi
 
 void SH1106_DrawRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color, bool fill)
 {
-    SH1106_DrawFastHLine(x, y, w, color);
-    SH1106_DrawFastHLine(x, y+h, w, color);
-    SH1106_DrawFastVLine(x, y, h, color);
-    SH1106_DrawFastVLine(x+w, y, h, color);
+    if (fill)
+    {
+        uint8_t my = 0;
+        for (my=0 ; my<h ; my++)
+        {
+            SH1106_DrawFastHLine(x, y+my, w, color);
+        }
+    }
+    else
+    {
+        SH1106_DrawFastHLine(x, y, w, color);
+        SH1106_DrawFastHLine(x, y+h, w, color);
+        SH1106_DrawFastVLine(x, y, h, color);
+        SH1106_DrawFastVLine(x+w, y, h, color);
+    }
 }

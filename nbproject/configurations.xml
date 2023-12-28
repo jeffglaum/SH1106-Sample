@@ -4,11 +4,15 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <logicalFolder name="Fonts" displayName="Fonts" projectFiles="true">
+      </logicalFolder>
       <itemPath>system.h</itemPath>
       <itemPath>user.h</itemPath>
       <itemPath>delay.h</itemPath>
       <itemPath>i2c.h</itemPath>
       <itemPath>sh1106_panel.h</itemPath>
+      <itemPath>gfxfont.h</itemPath>
+      <itemPath>font.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -26,6 +30,7 @@
       <itemPath>i2c.c</itemPath>
       <itemPath>delay.c</itemPath>
       <itemPath>sh1106_panel.c</itemPath>
+      <itemPath>font.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -36,6 +41,9 @@
     <itemPath>legal_disclaimer.txt</itemPath>
     <itemPath>project_information.txt</itemPath>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>Fonts</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="XC16_24FJ256GA110" type="2">

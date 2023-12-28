@@ -12,7 +12,9 @@
             <sourceEncoding>ISO-8859-1</sourceEncoding>
             <asminc-extensions/>
             <make-dep-projects/>
-            <sourceRootList/>
+            <sourceRootList>
+                <sourceRootElem>Fonts</sourceRootElem>
+            </sourceRootList>
             <confList>
                 <confElem>
                     <name>XC16_24FJ256GA110</name>

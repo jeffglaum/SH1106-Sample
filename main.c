@@ -24,7 +24,8 @@
 
 #include "i2c.h"
 #include "sh1106_panel.h"
-
+#include "font.h"
+#include "Fonts/FreeSans9pt7b.h"
 
 /******************************************************************************/
 /* Global Variable Declaration                                                */
@@ -124,27 +125,41 @@ int16_t main(void)
     SH1106_InvertDisplay(true);
     SH1106_ClearDisplay();
     
-    SH1106_DrawRect(7, 7, 50, 50, WHITE, false);
-    SH1106_DrawCircle(32,32, 25, WHITE, false);
-    SH1106_DrawRect(67, 7, 50, 50, WHITE, false);
+    SetFont(&FreeSans9pt7b);
+    WriteChar('\n');
+    WriteChar('J');
+    WriteChar('e');
+    WriteChar('f');
+    WriteChar('f');
+    WriteChar('\n');
+    WriteChar('G');
+    WriteChar('l');
+    WriteChar('a');
+    WriteChar('u');
+    WriteChar('m');
+
+    //SH1106_DrawRect(7, 7, 50, 50, WHITE, false);
+    //SH1106_DrawCircle(32,32, 25, WHITE, false);
+    //SH1106_DrawRect(67, 7, 50, 50, WHITE, false);
     SH1106_DrawCircle(92,32, 25, WHITE, false);
 
     SH1106_Display();
 
     while(1)
     {
-        SH1106_DrawFastHLine(7, 32, 50, BLACK);
+        //SH1106_DrawFastHLine(7, 32, 50, BLACK);
         SH1106_DrawFastHLine(67, 32, 50, BLACK);
-        SH1106_DrawCircle(32, 32, 10, WHITE, true);
+        //SH1106_DrawCircle(32, 32, 10, WHITE, true);
         SH1106_DrawCircle(92, 32, 10, WHITE, true);
         SH1106_Display();
         __delay_ms(500);
-
-        SH1106_DrawCircle(32, 32, 10, BLACK, true);
+        
+        //SH1106_DrawCircle(32, 32, 10, BLACK, true);
         SH1106_DrawCircle(92, 32, 10, BLACK, true);
-        SH1106_DrawFastHLine(7, 32, 50, WHITE);
+        //SH1106_DrawFastHLine(7, 32, 50, WHITE);
         SH1106_DrawFastHLine(67, 32, 50, WHITE);
         SH1106_Display();
+
         __delay_ms(500);
 
         // Regularly check I2C sensors.

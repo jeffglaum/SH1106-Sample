@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/Users/jeffglaum/MPLABXProjects/SH1106%20Sample.X/main.c</file>
+            <file>file:/Users/jeffglaum/MPLABXProjects/SH1106%20Sample.X/delay.h</file>
+            <file>file:/Users/jeffglaum/MPLABXProjects/SH1106%20Sample.X/gfxfont.h</file>
+            <file>file:/Users/jeffglaum/MPLABXProjects/SH1106%20Sample.X/system.c</file>
+            <file>file:/Users/jeffglaum/MPLABXProjects/SH1106%20Sample.X/user.c</file>
+            <file>file:/Users/jeffglaum/MPLABXProjects/SH1106%20Sample.X/i2c.c</file>
+            <file>file:/Users/jeffglaum/MPLABXProjects/SH1106%20Sample.X/Fonts/FreeMonoBold12pt7b.h</file>
+            <file>file:/Users/jeffglaum/MPLABXProjects/SH1106%20Sample.X/interrupts.c</file>
+            <file>file:/Users/jeffglaum/MPLABXProjects/SH1106%20Sample.X/i2c.h</file>
+            <file>file:/Users/jeffglaum/MPLABXProjects/SH1106%20Sample.X/sh1106_panel.c</file>
+            <file>file:/Users/jeffglaum/MPLABXProjects/SH1106%20Sample.X/font.h</file>
+            <file>file:/Users/jeffglaum/MPLABXProjects/SH1106%20Sample.X/delay.c</file>
+            <file>file:/Users/jeffglaum/MPLABXProjects/SH1106%20Sample.X/Fonts/FreeMono12pt7b.h</file>
+            <file>file:/Users/jeffglaum/MPLABXProjects/SH1106%20Sample.X/configuration_bits.c</file>
+            <file>file:/Users/jeffglaum/MPLABXProjects/SH1106%20Sample.X/sh1106_panel.h</file>
+            <file>file:/Users/jeffglaum/MPLABXProjects/SH1106%20Sample.X/Fonts/FreeMono9pt7b.h</file>
+            <file>file:/Users/jeffglaum/MPLABXProjects/SH1106%20Sample.X/font.c</file>
+        </group>
+    </open-files>
+</project-private>
