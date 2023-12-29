@@ -82,6 +82,9 @@ int16_t main(void)
     SH1106_DrawCircle(90, 40, 10, WHITE, false);
     SH1106_DrawCircle(110, 40, 10, WHITE, true);
 
+    SH1106_DrawLine(0, 0, 127, 63, WHITE);
+    SH1106_DrawLine(127, 0, 0, 63, WHITE);
+
     SH1106_Display();
 
     while(1)

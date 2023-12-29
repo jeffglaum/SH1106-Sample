@@ -11,6 +11,7 @@
 #include <stdbool.h>       /* Includes true/false definition                  */
 #include <string.h>
 #include <math.h>
+#include <stdlib.h>
 
 #include "i2c.h"
 #include "sh1106_panel.h"
@@ -292,4 +293,54 @@ void SH1106_DrawRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color,
         SH1106_DrawFastVLine(x, y, h, color);
         SH1106_DrawFastVLine(x+w, y, h, color);
     }
+}
+
+/**************************************************************************/
+/*!
+   @brief    Write a line.  Bresenham's algorithm - thx wikpedia
+    @param    x0  Start point x coordinate
+    @param    y0  Start point y coordinate
+    @param    x1  End point x coordinate
+    @param    y1  End point y coordinate
+    @param    color 16-bit 5-6-5 Color to draw with
+*/
+/**************************************************************************/
+void SH1106_DrawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t color)
+{
+  int16_t steep = abs(y1 - y0) > abs(x1 - x0);
+  if (steep) {
+    sh1106_swap(x0, y0);
+    sh1106_swap(x1, y1);
+  }
+
+  if (x0 > x1) {
+    sh1106_swap(x0, x1);
+    sh1106_swap(y0, y1);
+  }
+
+  int16_t dx, dy;
+  dx = x1 - x0;
+  dy = abs(y1 - y0);
+
+  int16_t err = dx / 2;
+  int16_t ystep;
+
+  if (y0 < y1) {
+    ystep = 1;
+  } else {
+    ystep = -1;
+  }
+
+  for (; x0 <= x1; x0++) {
+    if (steep) {
+      SH1106_DrawPixel(y0, x0, color);
+    } else {
+      SH1106_DrawPixel(x0, y0, color);
+    }
+    err -= dy;
+    if (err < 0) {
+      y0 += ystep;
+      err += dx;
+    }
+  }
 }

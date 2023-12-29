@@ -83,3 +83,4 @@ void SH1106_ClearDisplay(void);
 void SH1106_Display(void);
 void SH1106_DrawCircle (uint8_t x, uint8_t y, uint8_t r, uint16_t color, bool fill);
 void SH1106_DrawRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint16_t color, bool fill);
+void SH1106_DrawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1, uint16_t color);
