@@ -17,6 +17,7 @@
 
 #include <stdint.h>        /* Includes uint16_t definition                    */
 #include <stdbool.h>       /* Includes true/false definition                  */
+#include <math.h>
 
 #include "system.h"        /* System funct/params, like osc/peripheral config */
 #include "user.h"          /* User funct/params, such as InitApp              */
@@ -57,20 +58,10 @@ int16_t main(void)
     
     SetFont(&FreeSans9pt7b);
     WriteChar('\n');
-    WriteChar('J');
-    WriteChar('e');
-    WriteChar('f');
-    WriteChar('f');
-    WriteChar('e');
-    WriteChar('r');
-    WriteChar('y');
-    WriteChar(' ');
-    WriteChar('D');
+    WriteChar('M');
     WriteChar('a');
-    WriteChar('n');
-    WriteChar('i');
-    WriteChar('e');
-    WriteChar('l');
+    WriteChar('y');
+    WriteChar('a');
     WriteChar('\n');
     WriteChar('G');
     WriteChar('l');
@@ -78,18 +69,28 @@ int16_t main(void)
     WriteChar('u');
     WriteChar('m');
 
-    SH1106_DrawCircle(70, 40, 10, WHITE, true);
-    SH1106_DrawCircle(90, 40, 10, WHITE, false);
-    SH1106_DrawCircle(110, 40, 10, WHITE, true);
+    uint8_t cx = 90;
+    uint8_t cy = 32;
+    uint8_t cr = 25;
+    SH1106_DrawCircle(cx, cy, cr, WHITE, false);
 
-    SH1106_DrawLine(0, 0, 127, 63, WHITE);
-    SH1106_DrawLine(127, 0, 0, 63, WHITE);
+    double rads = 0;
+    uint16_t color = WHITE;
 
-    SH1106_Display();
-
-    while(1)
+    while(true)
     {
-        __delay_ms(500);
+        uint8_t tx = (cx + (cr-1) * cos(rads));
+        uint8_t ty = (cy + (cr-1) * sin(rads));
+        SH1106_DrawLine(cx, cy, tx, ty, color);
+        SH1106_Display();
+        __delay_ms(5);
+
+        rads += (6.0 * ONE_RADIAN);
+        if (rads > TWO_PI)
+        {
+            rads = 0;
+            color = (color == WHITE ? BLACK : WHITE);
+        }
 
         // Regularly check I2C sensors.
         I2C1_M_Poll(I2C_OLED_ADDRESS);
