@@ -77,7 +77,11 @@ int16_t main(void)
     WriteChar('a');
     WriteChar('u');
     WriteChar('m');
-    
+
+    SH1106_DrawCircle(70, 40, 10, WHITE, true);
+    SH1106_DrawCircle(90, 40, 10, WHITE, false);
+    SH1106_DrawCircle(110, 40, 10, WHITE, true);
+
     SH1106_Display();
 
     while(1)

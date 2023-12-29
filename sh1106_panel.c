@@ -99,7 +99,7 @@ void SH1106_InitDisplay(void)
     SH1106_command(SH1106_DISPLAYON);
 }
 
-void SH1106_DrawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color)
+static void SH1106_DrawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color)
 {
   // Do bounds/limit checks
   if(y < 0 || y >= SH1106_DISPLAYABLE_HEIGHT_PIXELS) { return; }
@@ -135,7 +135,7 @@ void SH1106_DrawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color)
   }
 }
 
-void SH1106_DrawFastVLine(int16_t x, int16_t __y, int16_t __h, uint16_t color) {
+static void SH1106_DrawFastVLine(int16_t x, int16_t __y, int16_t __h, uint16_t color) {
 
   // do nothing if we're off the left or right side of the screen
   if(x < 0 || x >= SH1106_DISPLAYABLE_WIDTH_PIXELS) { return; }
@@ -254,17 +254,23 @@ void SH1106_DrawCircle (uint8_t x, uint8_t y, uint8_t r, uint16_t color, bool fi
     int8_t mx = 0;
     int8_t my;
     
-    for (mx=r ; mx>=-r ; mx--)
+    if (fill)
     {
-        my = sqrt(r*r - mx*mx);
-        if (fill)
+        for (mx=r ; mx>=-r ; mx--)
         {
+            my = sqrt(r*r - mx*mx);
             SH1106_DrawFastVLine((x+mx), (y-my), (my*2), color);
         }
-        else
+    }
+    else
+    {
+        float radians = 0;
+        // Step by 4 radians to save time...
+        for (radians=0 ; radians < TWO_PI ; radians += (4.0 * ONE_RADIAN))
         {
-            SH1106_DrawPixel((x + mx), (y + my), color);
-            SH1106_DrawPixel((x + mx), (y - my), color);
+            uint8_t mx =   (x + (r * cos(radians)));
+            uint8_t my =   (y + (r * sin(radians)));
+            SH1106_DrawPixel(mx, my, color);
         }
     }
 }

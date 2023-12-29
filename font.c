@@ -55,7 +55,6 @@ static uint8_t textsize_x = 1;   ///< Desired magnification in X-axis of text to
 static uint8_t textsize_y = 1;   ///< Desired magnification in Y-axis of text to print()
 static   bool wrap = 0;            ///< If set, 'wrap' text at right edge of display
 static int16_t _width = SH1106_DISPLAYABLE_WIDTH_PIXELS;       ///< Display width as modified by current rotation
-static int16_t _height = SH1106_DISPLAYABLE_HEIGHT_PIXELS;      ///< Display height as modified by current rotation
 static uint16_t textcolor = WHITE;   ///< 16-bit background color for print()
 static uint16_t textbgcolor = BLACK; ///< 16-bit text color for print()    
 
