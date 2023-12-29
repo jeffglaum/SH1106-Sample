@@ -5,6 +5,7 @@
  * Created on December 27, 2023, 4:15 PM
  */
 
+// Derived from Adafruit's SH1106 library: https://github.com/wonho-maker/Adafruit_SH1106
 
 #include "xc.h"
 

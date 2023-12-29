@@ -1,5 +1,8 @@
 #pragma once
 
+// Derived from Adafruit's SH1106 library: https://github.com/wonho-maker/Adafruit_SH1106
+// 2023-12-29 Jeff Glaum
+
 #include <xc.h> // include processor files - each processor file is guarded.  
 
 #define I2C_OLED_ADDRESS                0x3C
